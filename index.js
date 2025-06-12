@@ -2,7 +2,7 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const http = require('http');
 
-// 📦 Install required packages if missing
+// 📦 Auto-install all required plugins
 const deps = [
   'mineflayer',
   'mineflayer-pathfinder',
@@ -27,7 +27,7 @@ const collectBlock = require('mineflayer-collectblock').plugin;
 const tool = require('mineflayer-tool').plugin;
 const pvp = require('mineflayer-pvp').plugin;
 
-// 🧠 Logging
+// 🧠 Logs
 let logs = [];
 function log(msg) {
   const line = `[${new Date().toISOString()}] ${msg}`;
@@ -36,11 +36,11 @@ function log(msg) {
   if (logs.length > 100) logs.shift();
 }
 
-// ✅ Create bot
 let bot;
 let firstJoin = true;
 const PASSWORD = 'Mishra@123';
 
+// 🤖 Bot setup
 function createBot() {
   bot = mineflayer.createBot({
     host: '191.96.231.2',
@@ -49,18 +49,20 @@ function createBot() {
   });
 
   bot.loadPlugin(pathfinder);
-  bot.loadPlugin(autoeat);
+  bot.loadPlugin(autoeat.plugin); // ✅ FIXED
   bot.loadPlugin(collectBlock);
   bot.loadPlugin(tool);
   bot.loadPlugin(pvp);
 
   bot.once('spawn', () => {
     log('✅ Bot spawned!');
-    bot.autoEat.options.priority = 'foodPoints';
+
+    // Setup movement
     const mcData = require('minecraft-data')(bot.version);
     const defaultMove = new Movements(bot, mcData);
     bot.pathfinder.setMovements(defaultMove);
 
+    // Register and Login
     if (firstJoin) {
       setTimeout(() => bot.chat(`/register ${PASSWORD} ${PASSWORD}`), 2000);
       firstJoin = false;
@@ -76,7 +78,7 @@ function createBot() {
   bot.on('error', e => log(`❌ Error: ${e.message}`));
   bot.on('kicked', r => log(`🚫 Kicked: ${r}`));
 
-  // 👂 Commands via in-game chat
+  // 💬 In-game chat commands
   bot.on('chat', async (username, message) => {
     if (username === bot.username) return;
 
@@ -131,7 +133,7 @@ function createBot() {
 
 createBot();
 
-// 🌐 Website server with logs + command sender
+// 🌐 Web UI for logs and command input
 const PORT = process.env.PORT || 3000;
 http.createServer((req, res) => {
   if (req.url === '/') {
@@ -195,4 +197,4 @@ http.createServer((req, res) => {
     res.writeHead(404);
     res.end('Not found');
   }
-}).listen(PORT, () => log(`🌍 Web panel at http://localhost:${PORT}`));
+}).listen(PORT, () => log(`🌍 Web panel live at http://localhost:${PORT}`));
