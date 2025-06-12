@@ -1,18 +1,27 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
+const http = require('http');
 
-// 💥 Install mineflayer if not installed
+// 🔁 Keep-alive server for Render or VPS
+http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('AFK Bot is alive\n');
+}).listen(process.env.PORT || 3000, () => {
+  console.log(`🌐 Server running on port ${process.env.PORT || 3000}`);
+});
+
+// 📦 Install mineflayer if not installed
 try {
   require.resolve('mineflayer');
 } catch (e) {
-  console.log('📦 mineflayer not found. Installing...');
+  console.log('📦 Installing mineflayer...');
   execSync('npm install mineflayer', { stdio: 'inherit' });
 }
 
-// ✅ Now require it
 const mineflayer = require('mineflayer');
 
-// 🤖 Bot setup
+let firstJoin = true;
+
 function createBot() {
   const bot = mineflayer.createBot({
     host: '191.96.231.2',
@@ -20,17 +29,21 @@ function createBot() {
     username: 'AFK_BOT_123'
   });
 
-  const PASSWORD = 'password123';
+  const PASSWORD = 'Mishra@123';
 
   bot.on('spawn', () => {
     console.log('✅ Bot spawned');
 
-    setTimeout(() => bot.chat(`/register ${PASSWORD} ${PASSWORD}`), 2000);
+    if (firstJoin) {
+      setTimeout(() => bot.chat(`/register ${PASSWORD} ${PASSWORD}`), 2000);
+      firstJoin = false;
+    }
+
     setTimeout(() => bot.chat(`/login ${PASSWORD}`), 5000);
   });
 
   bot.on('end', () => {
-    console.log('🔁 Reconnecting in 5s...');
+    console.log('🔁 Disconnected. Reconnecting in 5s...');
     setTimeout(createBot, 5000);
   });
 
