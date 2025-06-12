@@ -1,16 +1,19 @@
+// afk-bot.js
+
 const { execSync } = require('child_process');
 const fs = require('fs');
 const http = require('http');
 
-// 🔁 Keep-alive server for Render or VPS
+// 🌐 Keep-alive web server for Render + UptimeRobot
+const PORT = process.env.PORT || 3000;
 http.createServer((req, res) => {
   res.writeHead(200, { 'Content-Type': 'text/plain' });
-  res.end('AFK Bot is alive\n');
-}).listen(process.env.PORT || 3000, () => {
-  console.log(`🌐 Server running on port ${process.env.PORT || 3000}`);
+  res.end('✅ BOT_BY_AMAN is running!\n');
+}).listen(PORT, () => {
+  console.log(`🌍 Web server running at http://localhost:${PORT}`);
 });
 
-// 📦 Install mineflayer if not installed
+// 📦 Auto-install mineflayer if missing
 try {
   require.resolve('mineflayer');
 } catch (e) {
@@ -32,7 +35,7 @@ function createBot() {
   const PASSWORD = 'Mishra@123';
 
   bot.on('spawn', () => {
-    console.log('✅ Bot spawned');
+    console.log('✅ Bot spawned on server');
 
     if (firstJoin) {
       setTimeout(() => bot.chat(`/register ${PASSWORD} ${PASSWORD}`), 2000);
@@ -52,7 +55,7 @@ function createBot() {
   });
 
   bot.on('kicked', reason => {
-    console.log('🚫 Kicked:', reason);
+    console.log('🚫 Kicked from server:', reason);
   });
 }
 
