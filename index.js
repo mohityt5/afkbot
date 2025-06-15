@@ -2,27 +2,19 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const http = require('http');
 
-// 📦 Auto-install mineflayer if missing
-try {
-  require.resolve('mineflayer');
-} catch (e) {
-  console.log('📦 Installing mineflayer...');
-  execSync('npm install mineflayer', { stdio: 'inherit' });
-}
+//
+  require.re
 
-const mineflayer = require('mineflayer');
+  console.log
+  execSync('npstdi
+const mineflayer = requir');
 
-// 🧠 Bot logs buffer
+// 🧠 Bot l
 let logs = [];
-function log(msg) {
-  const time = new Date().toISOString();
+f
   const entry = `[${time}] ${msg}`;
-  console.log(entry);
-  logs.push(entry);
-  if (logs.length > 100) logs.shift(); // keep last 100 lines
-}
-
-// ✅ Create bot
+  if (logs.length > 100) lo
+// ✅
 let bot;
 let firstJoin = true;
 const PASSWORD = 'Mishra@123';
