@@ -29,9 +29,9 @@ const PASSWORD = 'Mishra@123';
 
 function createBot() {
   bot = mineflayer.createBot({
-    host: '191.96.231.2',
-    port: 10578,
-    username: 'BOT_BY_AMAN',
+    host: 'Mohit4457.aternos.me',
+    port:  22474,
+    username: 'powermc✅',
   });
 
   bot.on('spawn', () => {
@@ -44,7 +44,7 @@ function createBot() {
   });
 
   bot.on('end', () => {
-    log('🔁 Disconnected. Reconnecting in 5s...');
+    log('🔁 Disconnected. Reconnecting in 1s...');
     setTimeout(createBot, 5000);
   });
 
